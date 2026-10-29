@@ -1,12 +1,5 @@
 package game
 
-func newSnake(width int, height int) Snake {
-	return []Position{
-		{X: width / 2, Y: height / 2},
-		{X: width/2 + 1, Y: height / 2},
-	}
-}
-
 type CellType int
 
 const (
@@ -29,4 +22,11 @@ func (g Game) CellAt(x, y int) CellType {
 		}
 	}
 	return CellEmpty
+}
+
+func newSnake(width int, height int) Snake {
+	return []Position{
+		{X: width / 2, Y: height / 2},
+		{X: width/2 + 1, Y: height / 2},
+	}
 }

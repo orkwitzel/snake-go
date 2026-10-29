@@ -1,6 +1,10 @@
 package game
 
-import "reflect"
+import (
+	"math/rand/v2"
+	"reflect"
+	"slices"
+)
 
 func NewGame() Game {
 	width := 10
@@ -33,6 +37,7 @@ func (g *Game) Tick(direction Direction) {
 
 	if reflect.DeepEqual(head, g.foodPosition) {
 		g.growSnake()
+		g.respawnFood()
 	}
 
 	if head.X > g.width || head.X < 0 || head.Y > g.height || head.Y < 0 {
@@ -78,6 +83,28 @@ func (g *Game) growSnake() {
 	s = append(s, lastPosition)
 
 	g.snake = s
+}
+
+func (g Game) getEmptyCells() []Position {
+	s := g.snake
+
+	positions := []Position{}
+	for y := range g.GetHeight() {
+		for x := range g.GetWidth() {
+			pos := Position{X: x, Y: y}
+			if !slices.Contains(s, pos) {
+				positions = append(positions, pos)
+			}
+		}
+	}
+
+	return positions
+}
+
+func (g *Game) respawnFood() {
+	emeptyCells := g.getEmptyCells()
+	randomIndex := rand.N(len(emeptyCells))
+	g.foodPosition = emeptyCells[randomIndex]
 }
 
 func (g Game) GetWidth() int {
